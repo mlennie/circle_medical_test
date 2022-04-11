@@ -9,7 +9,7 @@ class Api::V1::MoviesController < Api::V1::ApiApplicationController
       error = true
       message = "You must enter query text"
     end
-    results = MovieDb.search_by_query(query, source="movie")
+    results = MovieDb.search_by_query_for_all_pages(query, source="movie")
     if !error && results
       render json: { data: results }, status: 200
     else
