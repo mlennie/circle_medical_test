@@ -8,7 +8,6 @@ RSpec.describe 'MovieDb' do
   context 'network request mocked' do
     it 'return correctly formatted results' do
 
-
       stub = StubItems.new
       expected_results = {
         page: 1,

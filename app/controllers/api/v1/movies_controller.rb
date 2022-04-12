@@ -9,8 +9,7 @@ class Api::V1::MoviesController < Api::V1::ApiApplicationController
       error = true
       message = "You must enter query text"
     end
-    # add query check here
-    if query.encode('utf-8') rescue false
+    if false # add query check here to make sure query can be encoded
       error = true
       message = "Your query cannot have any special characters"
     end
