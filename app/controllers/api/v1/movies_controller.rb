@@ -9,11 +9,17 @@ class Api::V1::MoviesController < Api::V1::ApiApplicationController
       error = true
       message = "You must enter query text"
     end
-    results = MovieDb.search_by_query_for_all_pages(query, source="movie")
+    # add query check here
+    if query.encode('utf-8') rescue false
+      error = true
+      message = "Your query cannot have any special characters"
+    end
+
+    error, results = MovieDb.search_by_query_for_all_pages(query, source="movie")
     if !error && results
       render json: { data: results }, status: 200
     else
-      render json: { error: true, data: [], message: "no results could be found" }, status: 200
+      render json: { error: true, error: error, message: "no results could be found" }, status: 200
     end
   end
 

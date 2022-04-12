@@ -23,14 +23,20 @@ class MovieDb
     full_url = url + key + page + full_query
 
     options={}
+    error = false
 
     begin
       raw_results =  HTTParty.get(full_url, options).parsed_response.deep_symbolize_keys
-      parsed_results = self.parse_results(key, path, raw_results)
-      return parsed_results
+      if raw_results[:results].empty?
+        return "no results", []
+      else
+        parsed_results = self.parse_results(key, path, raw_results)
+        return error, parsed_results
+      end
     rescue Exception => e
+      error = e
       # send it to a remote error handling platform to notify team
-      return { error: true, message: e }
+      return error, []
     end
   end
 
@@ -38,10 +44,9 @@ class MovieDb
     page = 1
     results = []
 
-    page_results = self.search_by_query(query, page, source="movie")
-    return page_results
+    error, page_results = self.search_by_query(query, page, source="movie")
+    return error, page_results
 
   end
-
 
 end
