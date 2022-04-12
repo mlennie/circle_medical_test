@@ -1,6 +1,6 @@
 class MovieDb
 
-  def self.parse_results(key, path, raw_results)
+  def self.parse_results(key, raw_results)
     results_with_fields = []
     raw_results[:results].each do |movie|
       movie_data = {
@@ -15,12 +15,12 @@ class MovieDb
   end
 
   def self.search_by_query(query, page, source="movie")
-    path ="https://api.themoviedb.org/3"
-    url = "#{path}/search/#{source}"
+    base_url ="https://api.themoviedb.org/3"
+    path = "/search/#{source}"
     key = "?api_key=a99cc60fc2b34dbb18cb806b8a88ed14"
     page = "&page=#{page}"
     full_query = "&query=#{query.encode('utf-8')}"
-    full_url = url + key + page + full_query
+    full_url = base_url + path + key + page + full_query
 
     options={}
     error = false
@@ -30,7 +30,7 @@ class MovieDb
       if raw_results[:results].empty?
         return "no results", []
       else
-        parsed_results = self.parse_results(key, path, raw_results)
+        parsed_results = self.parse_results(key, raw_results)
         return error, parsed_results
       end
     rescue Exception => e
